@@ -1,10 +1,9 @@
-name: Baixar Rankings de Criptomoedas
+name: Nion
 
 on:
   schedule:
-    # Executa todo dia às 12h UTC (09h no Brasil)
+    # todo dia às 12h UTC (09h BRT)
     - cron: '0 12 * * *'
-  # Permite execução manual
   workflow_dispatch:
 
 jobs:
@@ -12,28 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clona o repositório
+      # 1) checkout do código
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2. Instala o R
+      # 2) setup do R (observe o caminho completo “actions/setup-r”)
       - name: Setup R
-        uses: r-lib/setup-r@v2 # <--- CORREÇÃO IMPORTANTE AQUI
+        uses: r-lib/actions/setup-r@v2
 
-      # 3. Instala o pacote crypto2
+      # 3) instalar o pacote crypto2
       - name: Instalar dependências R
         run: |
           Rscript -e 'install.packages("crypto2", repos="https://cloud.r-project.org")'
 
-      # 4. Executa o script que baixa e salva o ranking
+      # 4) rodar o script de download
       - name: Executar download de rankings
         run: |
           Rscript R/download_crypto_rankings.R
 
-      # 5. Faz upload dos arquivos gerados como artefato
+      # 5) fazer upload dos .rds gerados
       - name: Upload de artefatos
-        uses: actions/upload-artifact@v4 # <--- ATUALIZADO PARA v4 (OU TENTE v3 ou v2 se v4 falhar)
+        uses: actions/upload-artifact@v2
         with:
           name: rankings
           path: DB/CMK/
-
