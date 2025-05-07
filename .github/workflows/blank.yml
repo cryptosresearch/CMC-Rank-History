@@ -1,4 +1,4 @@
-name: Baixar Rankings de Criptomoedas
+name: Baixar Rankings
 
 on:
   schedule:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Clonar repositório
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Instalar R
         uses: r-lib/actions/setup-r@v2
