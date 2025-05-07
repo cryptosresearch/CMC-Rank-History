@@ -46,7 +46,7 @@ jobs:
     # 6) Executar o script que gera o ranking
     - name: Run Crypto Rankings script
       run: |
-        Rscript R/download_crypto_rankings.R
+        Rscript download_crypto_rankings.R
 
     # 7) Preparar autenticação Git para commit
     - name: Set up Git authentication
