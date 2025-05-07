@@ -1,35 +1,49 @@
-name: Nion
+name: Crypto Rankings (CoinMarketCap)
 
 on:
-  schedule:
-    # todo dia às 12h UTC (09h BRT)
-    - cron: '0 12 * * *'
+  # Executa manualmente ou em cron diário (12 h UTC = 09 h BRT)
   workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
 
 jobs:
-  download:
+  rankings:
     runs-on: ubuntu-latest
 
+    # Permissões mínimas recomendadas
+    permissions:
+      contents: read        # para checkout
+      id-token: write       # exigido pelo setup‑r
+
     steps:
-      # 1) checkout do código
-      - name: Checkout
-        uses: actions/checkout@v3
+      # 1) Baixar o código
+      - name: Checkout repositório
+        uses: actions/checkout@v4
 
-      # 2) setup do R (observe o caminho completo “actions/setup-r”)
-      - name: Setup R
+      # 2) Instalar R (r-lib/actions)
+      - name: Configurar R 4.3
         uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3'  # escolha da versão
 
-      # 3) instalar o pacote crypto2
-      - name: Instalar dependências R
+      # 3) Instalar dependências de sistema para pacotes R que usam {curl}/{openssl}
+      - name: Instalar bibliotecas do sistema
         run: |
-          Rscript -e 'install.packages("crypto2", repos="https://cloud.r-project.org")'
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      # 4) rodar o script de download
-      - name: Executar download de rankings
+      # 4) Instalar pacote R necessário
+      - name: Instalar pacotes R
+        run: |
+          Rscript -e "install.packages('crypto2', repos = 'https://cloud.r-project.org')"
+
+      # 5) Executar o script que baixa e salva o ranking
+      - name: Executar script de download
         run: |
           Rscript R/download_crypto_rankings.R
 
-      # 5) fazer upload dos .rds gerados
+      # 6) Fazer upload dos arquivos .rds gerados
       - name: Upload de artefatos
         uses: actions/upload-artifact@v2
         with:
