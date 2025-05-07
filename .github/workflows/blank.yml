@@ -18,7 +18,7 @@ jobs:
 
       # 2. Instala o R
       - name: Setup R
-        uses: r-lib/setup-r@v2 # <--- CORREÇÃO PRINCIPAL AQUI
+        uses: r-lib/setup-r@v2 # <--- CORREÇÃO IMPORTANTE AQUI
 
       # 3. Instala o pacote crypto2
       - name: Instalar dependências R
@@ -32,13 +32,7 @@ jobs:
 
       # 5. Faz upload dos arquivos gerados como artefato
       - name: Upload de artefatos
-        uses: actions/upload-artifact@v2 # Considere @v3 ou @v4 para versões mais recentes
-        with:
-          name: rankings
-          path: DB/CMK/
-      # 5. Faz upload dos arquivos gerados como artefato
-      - name: Upload de artefatos
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4 # <--- ATUALIZADO PARA v4 (OU TENTE v3 ou v2 se v4 falhar)
         with:
           name: rankings
           path: DB/CMK/
