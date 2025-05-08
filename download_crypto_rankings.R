@@ -6,7 +6,7 @@ library(crypto2) # Download Crypto Currency Data from 'CoinMarketCap' without 'A
 dir.create("DB/CMK", recursive = TRUE, showWarnings = FALSE)
 
 active_list <- crypto_listings()
-active_list <- active_list[active_list$is_active==1]
+#active_list <- active_list[active_list$is_active==1]
 active_list <-active_list[order(active_list$cmc_rank),]
 
 names(active_list)
